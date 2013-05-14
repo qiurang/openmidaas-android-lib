@@ -44,7 +44,7 @@ public class DeviceRegistrationTest extends InstrumentationTestCase{
 		mContext = getInstrumentation().getContext();
 		MIDaaS.setContext(mContext);
 		mockFactory = new MockTransportFactory("device_reg_success.json");
-		mockFactory.setTrasport(new MockTransport(mContext));
+		mockFactory.setTransport(new MockTransport(mContext));
 		
 		ConnectionManager.setNetworkFactory(mockFactory);
 		

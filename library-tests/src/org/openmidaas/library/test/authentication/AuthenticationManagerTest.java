@@ -68,7 +68,7 @@ public class AuthenticationManagerTest  extends InstrumentationTestCase {
 		
 		AttributePersistenceCoordinator.setPersistenceDelegate(new MockPersistence());
 		mockFactory = new MockTransportFactory("access_token_success.json");
-		mockFactory.setTrasport(new MockTransport(mContext));
+		mockFactory.setTransport(new MockTransport(mContext));
 		ConnectionManager.setNetworkFactory(mockFactory);
 		SubjectToken token = SubjectTokenFactory.createAttribute();
 		token.setSignedToken("header.payload.signature");

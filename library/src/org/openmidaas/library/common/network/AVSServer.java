@@ -28,6 +28,7 @@ import org.openmidaas.library.common.Constants;
 import org.openmidaas.library.common.Constants.ATTRIBUTE_STATE;
 import org.openmidaas.library.model.SubjectToken;
 import org.openmidaas.library.model.core.AbstractAttribute;
+import org.openmidaas.library.model.core.InitializeVerificationCallback;
 import org.openmidaas.library.model.core.MIDaaSError;
 import org.openmidaas.library.model.core.MIDaaSException;
 
@@ -82,14 +83,43 @@ public class AVSServer {
 	 * @throws JSONException
 	 */
 	public static void startAttributeVerification(AbstractAttribute<?> attribute,
-			AsyncHttpResponseHandler responseHandler) throws JSONException {
-		AccessToken token = AuthenticationManager.getInstance().getAccessToken();
-		if(token == null) {
-			MIDaaS.logError(TAG, "Error getting access token. Access token is null");
-			responseHandler.onFailure(new MIDaaSException(MIDaaSError.ERROR_AUTHENTICATING_DEVICE), "");
-		} else {
-			ConnectionManager.postRequest(SERVER_WITH_SSL, Constants.INIT_AUTH_URL, getAuthHeader(token), attribute.getAttributeAsJSONObject(), responseHandler);
-		}
+			final AsyncHttpResponseHandler callback) throws JSONException {
+//		RetriableTask retriableTask = new RetriableTask(new AVSPostDataTask(Constants.INIT_AUTH_URL, null, attribute.getAttributeAsJSONObject(), new AsyncHttpResponseHandler() {
+//			
+//			@Override
+//			public void onSuccess(String response) { 
+//				callback.onSuccess(response);
+//			}
+//			@Override
+//			public void onFailure(Throwable e, String response){
+//				callback.onFailure(e, response);
+//			}
+//			
+//		}));
+//		retriableTask.startTaskWithRetries(Constants.MAX_ACCESS_TOKEN_RETRY);
+		
+		RetriableTaskController controller = new RetriableTaskController(new AVSPostDataTask(Constants.INIT_AUTH_URL, null,  attribute.getAttributeAsJSONObject()), 
+				new RetryHandler() {
+			
+			@Override
+			public void onSuccess(String response) {
+				callback.onSuccess(response);
+			}
+			
+			@Override
+			public void onError(Throwable throwable, String response) {
+				callback.onFailure(throwable, response);
+			}
+
+			@Override
+			public boolean shouldRetry(int currentRetryCount) {
+				if(currentRetryCount < 3) 
+					return true;
+				return false;
+			}
+		}); 
+
+		controller.startTask();
 	}
 
 	/**

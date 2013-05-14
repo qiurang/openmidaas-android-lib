@@ -13,22 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package org.openmidaas.library.test;
+package org.openmidaas.library.common.network;
 
-import org.openmidaas.library.common.Constants.ATTRIBUTE_STATE;
-import org.openmidaas.library.model.core.AbstractAttribute;
+import java.util.HashMap;
 
-public class MockAttribute extends AbstractAttribute<String>{
+import org.openmidaas.library.authentication.core.AccessToken;
 
-	public MockAttribute() {
-		mName = "MockAttribute";
-		mState = ATTRIBUTE_STATE.NOT_VERIFIED;
-		mSignedToken = "1234.1234.1234";
-		mValue = "MockAttribute";
-	}
+public final class Utils {
 	
-	@Override
-	protected boolean validateAttribute(String value) {
-		return true;
+	public static HashMap<String, String> getAuthHeader(AccessToken token) {
+		HashMap<String, String> headers = new HashMap<String, String>();
+		headers.put("Authorization", "Bearer "+token.toString());
+		return headers;
 	}
+
 }

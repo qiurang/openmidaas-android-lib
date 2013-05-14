@@ -51,6 +51,9 @@ public final class Constants {
 	public enum ATTRIBUTE_STATE { VERIFIED, PENDING_VERIFICATION, NOT_VERIFIABLE, NOT_VERIFIED, ERROR_IN_SAVE, UNKNOWN };
 	
 	public enum RESERVED_WORDS { email, credit_card, address, subject_token }
+	
+	public static final int MAX_ACCESS_TOKEN_RETRY = 3;
+	
 	private static List<String> mReservedWordsAsString = new ArrayList<String>();
 	static {
 		mReservedWordsAsString.clear();

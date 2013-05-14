@@ -31,6 +31,7 @@ import org.openmidaas.library.model.core.AbstractAttribute;
 import org.openmidaas.library.model.core.MIDaaSException;
 import org.openmidaas.library.persistence.AttributePersistenceCoordinator;
 import org.openmidaas.library.test.authentication.MockAccessTokenSuccessStrategy;
+import org.openmidaas.library.test.models.MockAttribute;
 import org.openmidaas.library.test.models.MockPersistence;
 import org.openmidaas.library.test.network.MockTransport;
 import org.openmidaas.library.test.network.MockTransportFactory;
@@ -53,13 +54,13 @@ public class MIDaaSTest extends InstrumentationTestCase {
 		AttributePersistenceCoordinator.setPersistenceDelegate(new MockPersistence());
 		AuthenticationManager.getInstance().setAccessTokenStrategy(new MockAccessTokenSuccessStrategy());
 		mockFactory = new MockTransportFactory("verification_bundle_response.json");
-		mockFactory.setTrasport(new MockTransport(mContext));
+		mockFactory.setTransport(new MockTransport(mContext));
 		ConnectionManager.setNetworkFactory(mockFactory);
 	}
 
 	@SmallTest
 	public void testValidAttributeBundle() {
-		mockFactory.setTrasport(new MockVerifiedAttributeBundleRequest(mContext));
+		mockFactory.setTransport(new MockVerifiedAttributeBundleRequest(mContext));
 		mockFactory.setFilename("verification_bundle_response.json");
 		ConnectionManager.setNetworkFactory(mockFactory);
 		final CountDownLatch latch = new CountDownLatch(1);
@@ -130,7 +131,7 @@ public class MIDaaSTest extends InstrumentationTestCase {
 
 	@SmallTest
 	public void testNullState() {
-		mockFactory.setTrasport(new MockVerifiedAttributeBundleRequest(mContext));
+		mockFactory.setTransport(new MockVerifiedAttributeBundleRequest(mContext));
 		mockFactory.setFilename("verification_bundle_response.json");
 		ConnectionManager.setNetworkFactory(mockFactory);
 		final CountDownLatch latch = new CountDownLatch(1);

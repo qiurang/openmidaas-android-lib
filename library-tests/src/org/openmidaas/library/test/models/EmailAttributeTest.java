@@ -50,8 +50,8 @@ public class EmailAttributeTest extends InstrumentationTestCase{
 			AuthenticationManager.getInstance().setAccessTokenStrategy(new MockAccessTokenSuccessStrategy());
 			emailAttribute =  EmailAttributeFactory.createAttribute();
 			emailAttribute.setValue(validEmail);
-			mockFactory = new MockTransportFactory("init_email_ver_success.json");
-			mockFactory.setTrasport(new MockTransport(mContext));
+			mockFactory = new MockTransportFactory("init_attr_ver_success.json");
+			mockFactory.setTransport(new MockTransport(mContext));
 			ConnectionManager.setNetworkFactory(mockFactory);
 			isInit = true;
 		}
@@ -134,7 +134,7 @@ public class EmailAttributeTest extends InstrumentationTestCase{
 		
 		private void initializeEmailVerificationSuccess() throws Exception {
 			final CountDownLatch mLatch = new CountDownLatch(1);
-			mockFactory.setFilename("init_email_ver_success.json");
+			mockFactory.setFilename("init_attr_ver_success.json");
 			emailAttribute.startVerification(new InitializeVerificationCallback() {
 
 				@Override

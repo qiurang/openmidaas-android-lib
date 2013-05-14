@@ -38,7 +38,7 @@ public class MockTransportFactory implements NetworkFactory{
 		transport.setMockDataFile(fileName);
 	}
 	
-	public void setTrasport(MockTransport transport) {
+	public void setTransport(MockTransport transport) {
 		this.transport = transport;
 	}
 }
