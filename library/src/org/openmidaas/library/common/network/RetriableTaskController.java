@@ -43,24 +43,25 @@ public class RetriableTaskController {
 	}
 	
 	protected void startTask() {
-		try {
-			do {
-				mTask.execute(mRetryHandler);
-				mTriesSoFar++;
-				if(mRetryHandler.isTerminateRequested()) {
-					break;
-				}
-				if (mRetryHandler.shouldRetry(mTriesSoFar)) {
-					MIDaaS.logDebug(TAG, "Retry count: " + mTriesSoFar);
-					MIDaaS.logDebug(TAG, "Retrying... ");
-					continue;
-				} else {
-					mRetryHandler.getCallback().onError(new Exception("Maximum tries completed"), "");
-					break;
+			do { 
+				try {
+					mTask.execute(mRetryHandler);
+					mTriesSoFar++;
+					if(mRetryHandler.isTerminateRequested()) {
+						break;
+					}
+					if (mRetryHandler.shouldRetry(mTriesSoFar)) {
+						MIDaaS.logDebug(TAG, "Retry count: " + mTriesSoFar);
+						MIDaaS.logDebug(TAG, "Retrying... ");
+						continue;
+					} else {
+						mRetryHandler.getCallback().onError(new Exception("Maximum tries completed"), "");
+						break;
+					}
+				} catch(Exception e) {
+					MIDaaS.logError(TAG, e.getMessage());
 				}
 			} while(true);
-		} catch(Exception e) {
-			MIDaaS.logError(TAG, e.getMessage());
-		}
+		
 	}
 }
